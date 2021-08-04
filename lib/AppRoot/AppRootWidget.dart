@@ -13,6 +13,8 @@ class AppRootWidget extends StatefulWidget {
 
 class _AppRootWidgetState extends State<AppRootWidget> {
 
+  GlobalKey globalKey = GlobalKey();
+
   final List<Widget> pages = [
     AppHomeWidget(),
     AppNewWidget(),
@@ -31,6 +33,7 @@ class _AppRootWidgetState extends State<AppRootWidget> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      key: globalKey,
       theme: ThemeData(
           primaryColor: Colors.pink
       ),
