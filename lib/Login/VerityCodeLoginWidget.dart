@@ -1,8 +1,11 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/Tool/TimerButtonWidget.dart';
 import 'package:flutter_app/Tool/ToolToastWidget.dart';
+import 'package:flutter_app/Login/LoginModel.dart';
 
 /*登录界面*/
 class VerityCodeLoginWidget extends StatefulWidget {
@@ -15,11 +18,12 @@ class VerityCodeLoginWidget extends StatefulWidget {
 
 class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
 
-  /*是否选中协议*/
-  bool isSelect = false;
-
-  /*按钮是否为可选中状态*/
-  bool isAllowLogin = false;
+  /*
+  * 登录模型
+  *
+  * 矫正信息是否输入完整
+  */
+  LoginModel loginModel = LoginModel();
 
   /*监听手机号输入框*/
   TextEditingController phoneController = TextEditingController();
@@ -66,10 +70,10 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
                         SizedBox(height: 40,),
                         this.getLoginButton(),
                         SizedBox(height: 18,),
-                        Center(child: this.getRichText(),)
+                        Center(child: this.getRichText(),),
                       ],
                     )
-                ))
+                )),
               ],
             )
         ),
@@ -97,13 +101,19 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
     ToolToast.showLongToast('点击隐私条款');
   }
 
+  void handleClickLoginAction() {
+    String? err = this.loginModel.getErrText();
+    if (err == null) {
+      this.sendLoginRequest();
+    }else {
+      ToolToast.showLongToast(err);
+    }
+  }
+
   /*更新界面状态*/
   void updateWidget(){
-    if (this.isSelect && phoneController.text.isNotEmpty && verityController.text.isNotEmpty) {
-      this.isAllowLogin = true;
-    }else {
-      this.isAllowLogin = false;
-    }
+    this.loginModel.phoneText = phoneController.text;
+    this.loginModel.verityCode = verityController.text;
     setState(() {});
   }
 
@@ -113,11 +123,19 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
     bool isAllow = phone.length == 11;
     if (isAllow) {
       this.focus.unfocus();
+      ToolToast.showLongToast('验证码发送成功');
     }else {
       ToolToast.showLongToast('请输入手机号');
     }
     return isAllow;
   }
+
+  /*发送登录请求*/
+  void sendLoginRequest() {
+    ToolToast.showLongToast('登录成功');
+  }
+
+
 
   /*获取顶部文字显示*/
   Widget getHeaderTextWidget(double width) {
@@ -151,27 +169,12 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
 
   Widget getPhoneTextFieldWidget() {
     return Container(
-      height: 60,
+      height: 54,
       padding: EdgeInsets.only(left: 25 , right: 35),
-      child: Column(
+      child: Flex(
+        direction: Axis.vertical,
         children: [
-          TextField(
-            keyboardType: TextInputType.phone,
-            controller: phoneController,
-            focusNode: this.focus,
-            style: TextStyle(
-                color: Color.fromRGBO(51, 51, 51, 1),
-                fontSize: 16
-            ),
-            decoration: InputDecoration(
-                hintText: '请输入手机号',
-                hintStyle: TextStyle(
-                  fontSize: 16,
-                  color: Color.fromRGBO(204, 204, 204, 1)
-                ),
-                border: InputBorder.none
-            ),
-          ),
+          Expanded(child: this.createPhoneTextFieldWidget()),
           Divider(color: Color.fromRGBO(228, 228, 228, 1), height: 0.5,)
         ],
       )
@@ -180,49 +183,79 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
 
   Widget getVerityCodeTextFieldWidget() {
     return Container(
-      height: 60,
+      height: 54,
       padding: EdgeInsets.only(left: 25 , right: 30),
-      child: Column(
+      child: Flex(
+        direction: Axis.vertical,
         children: [
-          Row(
-            children: [
-              Flexible(
-                fit: FlexFit.loose,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  controller: verityController,
-                  style: TextStyle(
-                    color: Color.fromRGBO(51, 51, 51, 1),
-                    fontSize: 16
-                  ),
-                  decoration: InputDecoration(
-                      hintText: '请输入验证码',
-                      hintStyle: TextStyle(
-                          fontSize: 16,
-                          color: Color.fromRGBO(204, 204, 204, 1)
-                      ),
-                      border: InputBorder.none
-                  ),
-                ),
-              ),
-              SizedBox(width: 8),
-              Container(
-                width: 0.5,
-                height: 12,
-                padding: EdgeInsets.only(top: (60 - 12)/2),
-                color: Color.fromRGBO(228, 228, 228, 1),
-              ),
-              SizedBox(width: 8),
-              TimerButtonWidget(
-                onPress: (){
-                  return this.sendGetVerityCodeRequest();
-                },
-              )
-            ],
-          ),
+          Expanded(child: this.createVerityCodeTextFieldWidget(),),
           Divider(color: Color.fromRGBO(228, 228, 228, 1), height: 0.5,)
-        ],
+        ]
       )
+    );
+  }
+
+  Widget createPhoneTextFieldWidget() {
+    return TextField(
+      maxLines: this.loginModel.maxPhoneCount,
+      keyboardType: TextInputType.phone,
+      controller: phoneController,
+      focusNode: this.focus,
+      maxLength: 11,
+      style: TextStyle(
+          color: Color.fromRGBO(51, 51, 51, 1),
+          fontSize: 16
+      ),
+      decoration: InputDecoration(
+          counterText:'',
+          hintText: '请输入手机号',
+          hintStyle: TextStyle(
+              fontSize: 16,
+              color: Color.fromRGBO(204, 204, 204, 1)
+          ),
+          border: InputBorder.none
+      ),
+    );
+  }
+
+  Widget createVerityCodeTextFieldWidget() {
+    return  Row(
+      children: [
+        Flexible(
+          fit: FlexFit.loose,
+          child: TextField(
+            maxLength: this.loginModel.maxVerityCode,
+            keyboardType: TextInputType.number,
+            controller: verityController,
+            style: TextStyle(
+                color: Color.fromRGBO(51, 51, 51, 1),
+                fontSize: 16
+            ),
+            decoration: InputDecoration(
+              hintText: '请输入验证码',
+              border: InputBorder.none,
+              hintStyle: TextStyle(
+                fontSize: 16,
+                color: Color.fromRGBO(204, 204, 204, 1),
+              ),
+              counterText: '',
+            ),
+          ),
+        ),
+        SizedBox(width: 8),
+        Container(
+          width: 0.5,
+          height: 12,
+          padding: EdgeInsets.only(top: (60 - 12)/2),
+          color: Color.fromRGBO(228, 228, 228, 1),
+        ),
+        SizedBox(width: 8),
+        TimerButtonWidget(
+          onPress: (){
+            return this.sendGetVerityCodeRequest();
+          },
+        )
+      ],
     );
   }
 
@@ -237,14 +270,14 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith((states) {
                 //默背景颜色
-                if (this.isAllowLogin) {
+                if (this.loginModel.isComplete()) {
                   return Color.fromRGBO(255, 129, 59, 1);
                 }
                 return Color.fromRGBO(204, 204, 204, 1);
               }),
             ),
             onPressed: (){
-
+              this.handleClickLoginAction();
             },
             child: Container(
               height: 60,
@@ -264,6 +297,7 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
     );
   }
 
+
   /*获取富文本的展示*/
   Widget getRichText() {
     return Container(
@@ -274,9 +308,9 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
             WidgetSpan(
               alignment: PlaceholderAlignment.middle,
               child: GestureDetector(
-                child: this.isSelect ? Image.asset('images/selected_box.png') : Image.asset('images/unSelect_box.png'),
+                child: this.loginModel.isSelectProtocol ? Image.asset('images/selected_box.png') : Image.asset('images/unSelect_box.png'),
                 onTap: (){
-                  this.isSelect = !this.isSelect;
+                  this.loginModel.isSelectProtocol = !this.loginModel.isSelectProtocol;
                   this.updateWidget();
                 },
               ),
