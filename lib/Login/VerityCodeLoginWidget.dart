@@ -59,6 +59,9 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
             child: Flex(
               direction: Axis.vertical,
               children: [
+                /*
+                *   SingleChildScrollView防止键盘弹出时界面回报超出布局的错误
+                **/
                 Expanded(child: SingleChildScrollView(
                     child: Column(
                       children: [

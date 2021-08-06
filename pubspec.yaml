@@ -59,6 +59,20 @@ flutter:
     - images/img_x.png
     - images/unSelect_box.png
     - images/selected_box.png
+    - images/mine_place_icon.png
+    - images/addCar_bg.png
+    - images/order_wait_pay.png
+    - images/order_payed.png
+    - images/order_refund.png
+    - images/order_all.png
+    - images/mine_booking.png
+    - images/mine_consult.png
+    - images/mine_reward.png
+    - images/right_row.png
+    - images/mine_feedback.png
+    - images/mine_set.png
+    - images/mine_protocol.png
+    - images/mine_private.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
