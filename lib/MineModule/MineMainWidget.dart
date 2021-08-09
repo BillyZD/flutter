@@ -46,6 +46,7 @@ class _MineMainWidgetState extends State<MineMainWidget> {
 
   @override
   Widget build(BuildContext context) {
+    print('初始化build');
     return CustomScrollView(
       physics: BouncingScrollPhysics(),
       slivers: [

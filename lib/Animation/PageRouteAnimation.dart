@@ -8,15 +8,15 @@ class PageRouteAnimationModel {
   final Widget page;
 
   /*默认弹出*/
-  void defaultPage(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+  Future defaultPage(BuildContext context) {
+    return Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
       return this.page;
     }));
   }
 
   /*从底部弹出*/
-  void pushBottomPage(BuildContext context) {
-    Navigator.push(context, this._createBottomRoute());
+  Future pushBottomPage(BuildContext context) {
+    return Navigator.push(context, this._createBottomRoute());
   }
 
   Route _createBottomRoute() {
