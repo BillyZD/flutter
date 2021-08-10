@@ -138,8 +138,6 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
     ToolToast.showLongToast('登录成功');
   }
 
-
-
   /*获取顶部文字显示*/
   Widget getHeaderTextWidget(double width) {
     return Container(

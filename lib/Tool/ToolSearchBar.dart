@@ -8,6 +8,7 @@ class ToolSearchBar extends StatefulWidget {
 
   const ToolSearchBar({Key? key , required this.onEditingComplete , this.textChange ,required this.placeholder , this.height = 48}) ;
 
+  /*结束编辑的回调*/
   final Function(String) onEditingComplete;
 
   /*输入框文字变化*/
@@ -49,7 +50,7 @@ class _ToolSearchBarState extends State<ToolSearchBar> {
         // 恢复到初始状态
         this.reSetState();
       }else if (this.textEditingController.text.isNotEmpty){
-        /*输入框*/
+        /*输入框文字变化*/
         ToolToast.showLongToast(this.textEditingController.text);
       }
     });
@@ -111,6 +112,10 @@ class _ToolSearchBarState extends State<ToolSearchBar> {
         print('输入完成');
         widget.onEditingComplete(this.textEditingController.text);
         this.focus.unfocus();
+      },
+      onChanged: (text){
+        print('改变$text');
+        print(this.textEditingController.text);
       },
     );
   }

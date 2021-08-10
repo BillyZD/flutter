@@ -191,21 +191,7 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
     return true;
   }
 }
-//
-// SliverGrid(
-// delegate: SliverChildBuilderDelegate(
-// (BuildContext cnt, int index){
-// return this.imageList[index];
-// },
-// childCount: this.imageList.length
-// ),
-// gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-// crossAxisCount: 2,
-// crossAxisSpacing: 10, // 水平间距
-// mainAxisSpacing: 10,
-// childAspectRatio: 1.0 // 宽高的比例
-// )
-// )
+
 
 class _MyVerticalDragGestureRecognizer extends VerticalDragGestureRecognizer {
 
