@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app/Tool/ToolToastWidget.dart';
 
+/*维修厂详情Widget*/
 class RepairDetailWidget extends StatefulWidget {
   const RepairDetailWidget({Key? key}) : super(key: key);
 
@@ -43,29 +45,42 @@ class _RepairDetailWidgetState extends State<RepairDetailWidget> {
       body: Flex(
         direction: Axis.vertical,
         children: [
-          Expanded(child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset('images/banner_place.png' , fit: BoxFit.fitWidth, width: width,),
-                this.createInfoWidget(),
-                SizedBox(height: 10,),
-                this.createGoodBrand(),
-                Container(
-                  height: 400,
-                  color: Colors.yellow,
+          Expanded(child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    Image.asset('images/banner_place.png' , fit: BoxFit.fitWidth, width: width,),
+                    this.createInfoWidget(),
+                    SizedBox(height: 10,),
+                    this.createGoodBrand(),
+                    SizedBox(height: 10,),
+                    this.createTeamWidget(),
+                    SizedBox(height: 10,),
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.only(top: 15 , left: 16) ,
+                      child: Flex(
+                        direction: Axis.horizontal,
+                        children: [
+                          Text('客户评价',style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                          ),)
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-              ],
-            )
+              ),
+              SliverList(delegate: SliverChildBuilderDelegate((BuildContext cnx , int index){
+                return createEvaluationWidget();
+              },
+                childCount: 3
+              ),)
+            ],
           )),
-
-          SafeArea(child:  Container(
-            height: 70,
-            color: Colors.red,
-          ))
-
+          SafeArea(child:  this.createBottomWidget())
         ],
       )
     );
@@ -219,7 +234,12 @@ class _RepairDetailWidgetState extends State<RepairDetailWidget> {
               ),
               Container(
                 padding: EdgeInsets.only(left: 16 , right: 16),
-                child: Image.asset('images/image_nav.png'),
+                child: IconButton(
+                  icon: Image.asset('images/image_nav.png'),
+                  onPressed: (){
+                    ToolToast.showLongToast('点击导航');
+                  },
+                ),
               )
             ],
           ),
@@ -231,7 +251,214 @@ class _RepairDetailWidgetState extends State<RepairDetailWidget> {
   /*创建擅长品牌Widget*/
   Widget createGoodBrand() {
     return Container(
-      
+      padding: EdgeInsets.only(left: 16 , right: 16 , top: 15 , bottom: 15),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('擅长品牌' , style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold
+          ),),
+          SizedBox(height: 15,),
+          Flex(
+            direction: Axis.horizontal,
+            children: [
+              Expanded(child: Container(
+                height: 50,
+                color: Color.fromRGBO(249, 249, 249, 1),
+              ),),
+              SizedBox(width: 12,),
+              Expanded(child: Container(
+                height: 50,
+                color: Color.fromRGBO(249, 249, 249, 1),
+              ),),
+              SizedBox(width: 12,),
+              Expanded(child: Container(
+                height: 50,
+                color: Color.fromRGBO(249, 249, 249, 1),
+              ),),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  /*创建技术团队Widget*/
+  Widget createTeamWidget() {
+    return Container(
+      padding: EdgeInsets.only(left: 16 , top: 15 , bottom: 15),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('技师团队' , style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold
+          ),),
+          SizedBox(height: 15,),
+          Container(
+            height: 90,
+            child: ListView.builder(itemBuilder: (cnx , index){
+              return Container(
+                height: 90,
+                width: 170,
+                child: Flex(
+                  direction: Axis.horizontal,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 155,
+                      height: 88,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(2)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.2),
+                              offset: Offset(0, 8),
+                              blurRadius: 0.4,
+                              spreadRadius: 0.1,
+                            ),
+                          ]
+                        ),
+                      ),
+                  ],
+                )
+              );
+            },
+              itemCount: 20,
+              scrollDirection: Axis.horizontal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /*创建底部按钮*/
+  Widget createBottomWidget(){
+    return Container(
+      height: 50,
+      color: Colors.white,
+      child: Flex(
+        direction: Axis.horizontal,
+        children: [
+          Expanded(child: TextButton(
+            onPressed: (){
+              ToolToast.showLongToast('点击联系门店');
+            },
+            child: Container(
+              height: 50,
+              child: Center(
+                child: Text('联系门店',style: TextStyle(
+                    color: Color.fromRGBO(255, 129, 59, 1),
+                    fontSize: 17
+                ),),
+              )
+            )
+          )),
+          Expanded(child: TextButton(
+            onPressed: (){
+              ToolToast.showLongToast('点击预约服务');
+            },
+            child: Container(
+              height: 50,
+              child: Center(
+                child: Text('预约服务', style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.white
+                ),),
+              )
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.resolveWith((states) => Color.fromRGBO(255, 129, 59, 1)), // 设置背景色
+              shape: MaterialStateProperty.all(BeveledRectangleBorder(borderRadius: BorderRadius.zero)) // 设置不需要圆角
+            ),
+          ))
+        ],
+      ),
+    );
+  }
+
+  /*创建评价cell*/
+  Widget createEvaluationWidget() {
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(top: 15 , left: 16) ,
+      child: Flex(
+        direction: Axis.vertical,
+        children: [
+          this.createEvaluationUserWidget(),
+          SizedBox(height: 18,),
+          Container(
+            padding: EdgeInsets.only(right: 20),
+            child: Text('保养不错，服务热情，店面整洁，施工专业，价格非常给力。施工专业，价格非常给力。' , maxLines: 2 , overflow: TextOverflow.ellipsis, style: TextStyle(
+              fontSize: 14,
+              color: Color.fromRGBO(51, 51, 51, 1)
+            ),),
+          ),
+          SizedBox(height: 15,),
+          Divider(height: 0.5,),
+        ],
+      ),
+    );
+  }
+
+  Widget createEvaluationUserWidget() {
+    return  Container(
+      padding: EdgeInsets.only(right: 16),
+      child: Flex(
+        direction: Axis.horizontal,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.asset('images/mine_place_icon.png' , width: 50 , height: 50,),
+          SizedBox(width: 10,),
+          Expanded(child: Container(
+            padding: EdgeInsets.only(top: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Flexible(child: Text('李晓满' , maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(
+                      fontSize: 14,
+                      color: Color.fromRGBO(51, 51, 51, 1),
+                    ),),),
+                    SizedBox(width: 10,),
+                    Container(
+                      height: 10,
+                      width: 0.5,
+                      color: Color.fromRGBO(228, 228, 228, 1),
+                    ),
+                    SizedBox(width: 10,),
+                    Text('上海大众',maxLines: 1,overflow: TextOverflow.clip, style: TextStyle(
+                        fontSize: 12,
+                        color: Color.fromRGBO(153, 153, 153, 1)
+                    ),)
+                  ],
+                ),
+                SizedBox(height: 3,),
+                Row(
+                    children: [
+                      Icon(Icons.star , color: Color.fromRGBO(255, 129, 59, 1), size: 12,),
+                      SizedBox(width: 3,),
+                      Text('4.8' , style: TextStyle(
+                          fontSize: 12,
+                          color: Color.fromRGBO(255, 129, 59, 1)
+                      ),),
+                    ]
+                ),
+              ],
+            ),
+          )),
+          Text('2020.10.12',style: TextStyle(
+              fontSize: 12,
+              color: Color.fromRGBO(153, 153, 153, 1)
+          ),)
+        ],
+      ),
     );
   }
 
