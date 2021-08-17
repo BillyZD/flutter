@@ -59,17 +59,22 @@ class _AppRootWidgetState extends State<AppRootWidget> {
             ),
 
             BottomNavigationBarItem(
-              icon: Icon(Icons.post_add),
+              icon: Icon(Icons.post_add ),
               label: '我的',
             ),
           ],
           onTap: (index){
-           setState(() {
-             this.currentIndex = index;
-           });
+            if (index != this.currentIndex) {
+              setState(() {
+                this.currentIndex = index;
+              });
+            }
           },
         ),
-        body: this.pages[currentIndex],
+        body: IndexedStack(
+          children: this.pages,
+          index: this.currentIndex,
+        ),
       ),
     );
   }

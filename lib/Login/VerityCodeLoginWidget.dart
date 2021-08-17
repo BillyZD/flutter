@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app/Tool/TimerButtonWidget.dart';
 import 'package:flutter_app/Tool/ToolToastWidget.dart';
 import 'package:flutter_app/Login/LoginModel.dart';
+import 'package:flutter_app/Tool/ToolEventManager.dart';
 
 /*登录界面*/
 class VerityCodeLoginWidget extends StatefulWidget {
@@ -136,6 +137,8 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
   /*发送登录请求*/
   void sendLoginRequest() {
     ToolToast.showLongToast('登录成功');
+    ToolEventManager().postEvent('login', ['a' , 'b']);
+
   }
 
   /*获取顶部文字显示*/

@@ -20,10 +20,11 @@ class _RepairDetailWidgetState extends State<RepairDetailWidget> {
     // TODO: implement initState
     super.initState();
     Future.delayed(Duration(seconds: 3) , (){
-      this.star = 5;
-      setState(() {
-
-      });
+      if (mounted) {
+        setState(() {
+          this.star = 5;
+        });
+      }
     });
   }
 
@@ -463,3 +464,43 @@ class _RepairDetailWidgetState extends State<RepairDetailWidget> {
   }
 
 }
+
+class Person {
+
+  late int age;
+
+  Person({required this.age});
+}
+
+mixin Age on Person {
+  
+  void addAge() {
+    this.age = this.age + 1;
+  }
+}
+
+class A extends Person with Age {
+  A() : super(age: 2);
+
+}
+
+void test() {
+  var a = A();
+  a.addAge();
+  print(a.age);
+}
+
+// class A extends Person with Age {
+//
+//   A() : super(age: 2);
+//
+//   static void test() {
+//     var a = A();
+//     a.addAge();
+//     print(a.age);
+//
+//
+//
+//   }
+//
+// }

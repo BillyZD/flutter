@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/Tool/ToolEventManager.dart';
 import 'dart:math';
 import 'package:flutter_app/Tool/ToolToastWidget.dart';
 import 'package:flutter_app/NewModule/MyChessBoardPainter.dart';
+import 'package:flutter_app/Category/List+Extension.dart';
 
 
 class NewMainWidget extends StatefulWidget {
@@ -29,7 +31,7 @@ class _NewMainWidgetState extends State<NewMainWidget> {
     return Column(
       children: [
         Container(
-            padding: EdgeInsets.only(left: 15 , top: 100),
+            padding: EdgeInsets.only(top: 100),
             child: GestureDetector(
               child: CustomPaint(
                 size: size,
@@ -50,11 +52,10 @@ class _NewMainWidgetState extends State<NewMainWidget> {
                     this.chessList.add(model);
                     this.isWin = this.getIsWin();
                     if (this.isWin) {
-                      ToolToast.showLongToast('${this.isBlack ? '黑棋' : '白棋'}已获胜');
+                      ToolToast.showLongToast('${this.isBlack ? '黑棋' : '白棋'}获胜');
                     }else {
                       this.isBlack = !this.isBlack;
                     }
-
                     setState(() {});
                   }else {
                     ToolToast.showLongToast('已存在棋子');
@@ -85,6 +86,36 @@ class _NewMainWidgetState extends State<NewMainWidget> {
                   child: Text('重来' ,style: TextStyle(
                     fontSize: 16,
                     color: Colors.white
+                  ),),
+                ),
+              ),
+            ),
+            SizedBox(width: 20,),
+            TextButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) => Color.fromRGBO(255, 129, 59, 1))
+              ),
+              onPressed: (){
+                if (this.isWin) {
+                  ToolToast.showLongToast('已获胜，无法撤销');
+                }else {
+                  if (this.chessList.isNotEmpty) {
+                    this.chessList.removeLast();
+                    this.isBlack = !this.isBlack;
+                    setState(() {});
+                  }else {
+                    ToolToast.showLongToast('没有棋子');
+                  }
+                }
+
+              },
+              child: Container(
+                width: 60,
+                height: 30,
+                child: Center(
+                  child: Text('撤销' ,style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white
                   ),),
                 ),
               ),
@@ -120,7 +151,7 @@ class _NewMainWidgetState extends State<NewMainWidget> {
     double effectRange = eWidth/3;
 
     int? _x;
-    for (var i = 0 ; i < this.squareNumber ; i ++) {
+    for (var i = 0 ; i <= this.squareNumber ; i ++) {
       double _offsetX = offsetX - eWidth * i.toDouble();
       _offsetX = _offsetX <= 0 ? -_offsetX : _offsetX;
       if (_offsetX <= effectRange) {
@@ -129,7 +160,7 @@ class _NewMainWidgetState extends State<NewMainWidget> {
       }
     }
     int? _y;
-    for (var i = 0 ; i < this.squareNumber ; i ++) {
+    for (var i = 0 ; i <= this.squareNumber ; i ++) {
       double _offsetY = offsetY - eWidth * i.toDouble();
       _offsetY = _offsetY <=0 ? -_offsetY : _offsetY;
       if (_offsetY <= effectRange) {
@@ -179,7 +210,7 @@ class _NewMainWidgetState extends State<NewMainWidget> {
           Point(pointList[i].x + 3, pointList[i].y),
           Point(pointList[i].x + 4, pointList[i].y),
         ];
-        if (_NewMainWidgetState.contains(pointList, winListPoint)) {
+        if (pointList.isContains(winListPoint)) {
           return true;
         }
         // 垂直方向
@@ -190,7 +221,7 @@ class _NewMainWidgetState extends State<NewMainWidget> {
           Point(pointList[i].x, pointList[i].y + 3),
           Point(pointList[i].x, pointList[i].y + 4),
         ];
-        if (_NewMainWidgetState.contains(pointList, winListPoint)) {
+        if (pointList.isContains(winListPoint)) {
           return true;
         }
         // 斜右下
@@ -201,7 +232,7 @@ class _NewMainWidgetState extends State<NewMainWidget> {
           Point(pointList[i].x + 3, pointList[i].y + 3),
           Point(pointList[i].x + 4, pointList[i].y + 4),
         ];
-        if (_NewMainWidgetState.contains(pointList, winListPoint)) {
+        if (pointList.isContains(winListPoint))  {
           return true;
         }
         // 斜右上
@@ -212,7 +243,7 @@ class _NewMainWidgetState extends State<NewMainWidget> {
           Point(pointList[i].x + 3, pointList[i].y - 3),
           Point(pointList[i].x + 4, pointList[i].y - 4),
         ];
-        if (_NewMainWidgetState.contains(pointList, winListPoint)) {
+        if (pointList.isContains(winListPoint))  {
           return true;
         }
       }
@@ -220,16 +251,5 @@ class _NewMainWidgetState extends State<NewMainWidget> {
     return false;
   }
 
-  /*判断数组是否包含子数组*/
-  static bool contains(List list , List subList) {
-    for (var value in subList) {
-      if (list.contains(value) == false) {
-        return false;
-      }
-    }
-    return true;
-  }
-
 }
-
 

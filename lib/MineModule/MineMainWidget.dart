@@ -5,6 +5,7 @@ import 'package:flutter_app/MineModule/MineCarAddInfoWidget.dart';
 import 'package:flutter_app/Tool/ToolGridWidget.dart';
 import 'package:flutter_app/Tool/ToolToastWidget.dart';
 import 'package:flutter_app/MineModule/MineMainCellModel.dart';
+import 'package:flutter_app/Tool/ToolEventManager.dart';
 
 
 /*我的主界面*/
@@ -24,6 +25,10 @@ class _MineMainWidgetState extends State<MineMainWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    ToolEventManager.oN('login', (arg) {
+      print('登录成功$arg');
+      ToolEventManager().off('login');
+    });
   }
 
   /*处理点击列表*/
