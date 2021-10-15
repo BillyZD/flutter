@@ -84,6 +84,7 @@ class _TimerButtonWidgetState extends State<TimerButtonWidget> {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       this.handleTimerAction();
     });
+
   }
 
   /*定时器事件*/

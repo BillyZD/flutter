@@ -28,6 +28,7 @@ class _NewMainWidgetState extends State<NewMainWidget> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     Size size = Size(width - 30, width - 30);
+    print(A(price: 120).getDiscount());
     return Column(
       children: [
         Container(

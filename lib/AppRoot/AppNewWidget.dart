@@ -5,6 +5,7 @@ import 'package:flutter_app/NewModule/NewMainWidget.dart';
 class AppNewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('bbbbbbb');
     return NewMainWidget();
   }
 }

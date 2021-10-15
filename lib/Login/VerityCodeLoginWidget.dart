@@ -95,6 +95,15 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
     verityController.addListener(() {
       this.updateWidget();
     });
+
+    LoginModel.readFormLocal((model) {
+      if (model != null) {
+        phoneController.text = model.phoneText ?? '';
+        verityController.text = model.verityCode ?? '';
+        this.loginModel = model;
+      }
+    });
+
   }
 
   void handleClickUserProtocol() {
@@ -136,9 +145,10 @@ class _VerityCodeLoginWidgetState extends State<VerityCodeLoginWidget> {
 
   /*发送登录请求*/
   void sendLoginRequest() {
-    ToolToast.showLongToast('登录成功');
-    ToolEventManager().postEvent('login', ['a' , 'b']);
-
+    // ToolToast.showLongToast('登录成功');
+    // this.loginModel.saveToLocal();
+    // ToolEventManager().postEvent('login', ['a' , 'b']);
+    this.loginModel.sendLoginRequest();
   }
 
   /*获取顶部文字显示*/

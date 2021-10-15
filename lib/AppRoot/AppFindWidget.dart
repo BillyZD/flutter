@@ -5,6 +5,7 @@ import 'package:flutter_app/FindModule/FindMainWidget.dart';
 class AppFindWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('aaaaaaa');
     return FindMainWidget();
   }
 }

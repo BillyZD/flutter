@@ -30,7 +30,7 @@ class ToolEventManager {
   }
 
   /*添加订阅*/
-  static void oN(eventName , EventCallback callback) async {
+  static void oN(eventName , EventCallback callback)  {
     print(ToolEventManager._internal() == bus);
     if (eventName == null) {return;}
     ToolEventManager._manager._subscribeMap[eventName] ??= <EventCallback>[];

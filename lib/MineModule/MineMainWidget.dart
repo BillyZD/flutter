@@ -29,6 +29,7 @@ class _MineMainWidgetState extends State<MineMainWidget> {
       print('登录成功$arg');
       ToolEventManager().off('login');
     });
+
   }
 
   /*处理点击列表*/

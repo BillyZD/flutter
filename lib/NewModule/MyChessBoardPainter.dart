@@ -66,4 +66,12 @@ class ChessModel {
 
   final bool isBlack;
 
+  static void test( int a , int b , [c]) {
+    var arr = [a , b];
+    var _arr = arr.map((e) {
+      return '$e';
+    }).toList();
+    print(a);
+  }
+
 }
